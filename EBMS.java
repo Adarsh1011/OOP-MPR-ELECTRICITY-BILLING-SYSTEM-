@@ -1,49 +1,97 @@
 import java.util.Scanner;
 
-public class EBMS {
-    public static void main(String[] args) {
+class User {
+    String name, connectionType;
+    int meterNum, prevReading, curReading, unitsUsed;
+    double totalCost;
+
+    void getDetails() {
         Scanner sc = new Scanner(System.in);
+        System.out.print("Enter your name: ");
+        name = sc.nextLine();
         System.out.println("Enter your connection type:");
         System.out.print("1) Domestic 2) Commercial: ");
-        String connectionType;
         if (sc.nextInt() == 1) {
             connectionType = "domestic";
         } else {
             connectionType = "commercial";
         }
-        System.out.print("Enter your meter number: ");
-        int meterNum = sc.nextInt();
+        System.out.print("Enter your meter number (last 2 digits only): ");
+        meterNum = sc.nextInt();
+    }
+
+    void getMeterReadings() {
+        Scanner sc = new Scanner(System.in);
         System.out.print("Enter previous month units reading: ");
-        int prevReading = sc.nextInt();
+        prevReading = sc.nextInt();
         System.out.print("Enter current month units reading: ");
-        int curReading = sc.nextInt();
-        int unitReading = curReading - prevReading;
-        double cost = 0;
+        curReading = sc.nextInt();
+        unitsUsed = curReading - prevReading;
+    }
+
+    int getUnitsUsed() {
+        return (curReading - prevReading);
+    }
+
+    double getTotalCost() {
         if (connectionType == "domestic") {
-            if (unitReading < 100) {
-                cost = unitReading * 2.93;
-            } else if (unitReading >= 100 && unitReading < 300) {
-                cost = unitReading * 5.18;
-            } else if (unitReading >= 300 && unitReading < 500) {
-                cost = unitReading * 7.79;
-            } else if (unitReading >= 500) {
-                cost = unitReading * 9.20;
+            if (unitsUsed < 100) {
+                totalCost = unitsUsed * 2.93;
+            } else if (unitsUsed >= 100 && unitsUsed < 300) {
+                totalCost = unitsUsed * 5.18;
+            } else if (unitsUsed >= 300 && unitsUsed < 500) {
+                totalCost = unitsUsed * 7.79;
+            } else if (unitsUsed >= 500) {
+                totalCost = unitsUsed * 9.20;
             }
         } else {
-            if (unitReading < 100) {
-                cost = unitReading * 4.77;
-            } else if (unitReading >= 100 && unitReading < 300) {
-                cost = unitReading * 7.90;
-            } else if (unitReading >= 300 && unitReading < 500) {
-                cost = unitReading * 9.08;
-            } else if (unitReading >= 500) {
-                cost = unitReading * 10.92;
+            if (unitsUsed < 100) {
+                totalCost = unitsUsed * 4.77;
+            } else if (unitsUsed >= 100 && unitsUsed < 300) {
+                totalCost = unitsUsed * 7.90;
+            } else if (unitsUsed >= 300 && unitsUsed < 500) {
+                totalCost = unitsUsed * 9.08;
+            } else if (unitsUsed >= 500) {
+                totalCost = unitsUsed * 10.92;
             }
         }
+        return totalCost;
+    }
+
+    void displayBill() {
         System.out.println();
-        System.out.println("Meter number: " + meterNum);
+        System.out.println("Name: " + name);
         System.out.println("Connection Type: " + connectionType);
-        System.out.println("Units consumed: " + unitReading);
-        System.out.println("Total Cost = Rs. " + cost);
+        System.out.println("Meter number: " + meterNum);
+        System.out.println("Units of electricity consumed: " + getUnitsUsed());
+        System.out.println("Total cost: Rs. " + getTotalCost());
+    }
+}
+
+class EBMS {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        User users[] = new User[99];
+        int choice = 0;
+        do {
+            System.out.println();
+            System.out.print("Choose an option: 1) Add new account 2) Get Bill 3) Exit: ");
+            choice = sc.nextInt();
+            switch (choice) {
+                case 1:
+                    User u = new User();
+                    u.getDetails();
+                    users[u.meterNum] = u;
+                    break;
+                case 2:
+                    System.out.print("Enter meter number (last 2 digits only): ");
+                    int user = sc.nextInt();
+                    users[user].getMeterReadings();
+                    users[user].displayBill();
+                    break;
+                default:
+                    break;
+            }
+        } while (choice != 3);
     }
 }
