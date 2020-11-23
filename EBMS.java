@@ -86,8 +86,12 @@ class EBMS {
                 case 2:
                     System.out.print("Enter meter number (last 2 digits only): ");
                     int user = sc.nextInt();
-                    users[user].getMeterReadings();
-                    users[user].displayBill();
+                    try {
+                        users[user].getMeterReadings();
+                        users[user].displayBill();
+                    } catch (Exception e) {
+                        System.out.println("Invalid Input");
+                    }
                     break;
                 default:
                     break;
